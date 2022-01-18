@@ -1,4 +1,6 @@
 package com.jugglinhats.hexagonal.storefront.domain;
 
-public record Product(String id, String name, String description) {
+import org.springframework.data.annotation.Id;
+
+public record Product(@Id String id, String name, String description) {
 }

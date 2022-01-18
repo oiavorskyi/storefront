@@ -6,6 +6,7 @@ import com.jugglinhats.hexagonal.storefront.domain.Tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
@@ -30,6 +31,7 @@ class StorefrontAPIControllerTests {
     void setup() {
         // overwrite default answers for reactive types
         when(storefrontService.queryProductsByTag(any())).thenReturn(Flux.empty());
+        when(storefrontService.getProductDetails(any())).thenReturn(Mono.empty());
     }
 
     @Test
@@ -96,5 +98,28 @@ class StorefrontAPIControllerTests {
                 .expectStatus().isOk()
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody().json(productsJson);
+    }
+
+    @Test
+    void getProductDetailsForExistingProduct() {
+        var product = new Product("productId", "productName", "productDescription");
+
+        given(storefrontService.getProductDetails("productId"))
+                .willReturn(Mono.just(product));
+
+        var productJson = """
+                {
+                    "id": "productId",
+                    "name": "productName",
+                    "description": "productDescription"
+                }
+                """;
+
+        webClient.get().uri("/products/{id}", "productId")
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody().json(productJson);
     }
 }

@@ -8,6 +8,7 @@ import com.jugglinhats.hexagonal.storefront.domain.Tag;
 import reactor.core.publisher.Mono;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,11 +21,16 @@ public class StorefrontAPIController {
         this.storefrontService = storefrontService;
     }
 
-    @GetMapping(value = "/products")
+    @GetMapping("/products")
     Mono<ProductsQueryResponse> productsQuery(@RequestParam String tag) {
         return storefrontService.queryProductsByTag(Tag.of(tag))
                 .collectList()
                 .map(products -> new ProductsQueryResponse(tag, products));
+    }
+
+    @GetMapping("/products/{productId}")
+    Mono<Product> productDetails(@PathVariable String productId) {
+        return storefrontService.getProductDetails(productId);
     }
 
     record ProductsQueryResponse(String tag_query, List<Product> products) {

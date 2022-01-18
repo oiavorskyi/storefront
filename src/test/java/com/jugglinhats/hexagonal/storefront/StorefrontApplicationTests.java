@@ -92,4 +92,23 @@ class StorefrontApplicationTests {
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody().json(homeStudioProducts);
     }
+
+    @Test
+    void returnsProductDetails() {
+        //language=JSON
+        var kawaiPiano = """
+                {
+                  "id": "83085b91-5d7d-4301-9119-719f150e879a",
+                  "name": "Kawai ES920 88-key Digital Piano",
+                  "description": "Kawai Tone and Touch, Plus Unbeatable Value"
+                }
+                """;
+
+        testClient.get().uri("/products/{id}", "83085b91-5d7d-4301-9119-719f150e879a")
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody().json(kawaiPiano);
+    }
 }

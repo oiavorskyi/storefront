@@ -21,6 +21,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataR2dbcTest
 class ProductRepositoryTests {
+    static final Product TELECASTER = new Product(
+            "f32e5442-2610-4d0c-a266-1dfc646c9d96",
+            "Fender American Professional II Telecaster Deluxe",
+            "A New Spin on the American Professional Telecaster Deluxe"
+    );
+    static final Product STRATOCASTER = new Product(
+            "48c1ccf1-ee72-4b90-82f1-e07390578c96",
+            "Squier Classic Vibe Stratocaster",
+            "The Stratocaster Never Goes Out of Style"
+    );
+
     @Autowired
     R2dbcEntityTemplate template;
     DatabaseClient dbClient;
@@ -42,26 +53,32 @@ class ProductRepositoryTests {
 
     @Test
     void findsProductsByTag() {
-        var telecaster = new Product(
-                "f32e5442-2610-4d0c-a266-1dfc646c9d96",
-                "Fender American Professional II Telecaster Deluxe",
-                "A New Spin on the American Professional Telecaster Deluxe"
-        );
-        var stratocaster = new Product(
-                "48c1ccf1-ee72-4b90-82f1-e07390578c96",
-                "Squier Classic Vibe Stratocaster",
-                "The Stratocaster Never Goes Out of Style"
-        );
-
         repository.findByTag("electric guitar")
                 .as(StepVerifier::create)
-                .assertNext(p -> assertThat(p).isEqualTo(telecaster))
-                .assertNext(p -> assertThat(p).isEqualTo(stratocaster))
+                .assertNext(p -> assertThat(p).isEqualTo(TELECASTER))
+                .assertNext(p -> assertThat(p).isEqualTo(STRATOCASTER))
                 .verifyComplete();
 
         repository.findByTag("unknown")
                 .as(StepVerifier::create)
                 .expectNextCount(0)
+                .verifyComplete();
+    }
+
+    @Test
+    void findsProductById() {
+        repository.findById(TELECASTER.id())
+                .as(StepVerifier::create)
+                .assertNext(p -> assertThat(p).isEqualTo(TELECASTER))
+                .verifyComplete();
+
+        repository.findById(STRATOCASTER.id())
+                .as(StepVerifier::create)
+                .assertNext(p -> assertThat(p).isEqualTo(STRATOCASTER))
+                .verifyComplete();
+
+        repository.findById("unknown")
+                .as(StepVerifier::create)
                 .verifyComplete();
     }
 

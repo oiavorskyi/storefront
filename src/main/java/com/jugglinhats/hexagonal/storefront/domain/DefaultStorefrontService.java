@@ -3,6 +3,7 @@ package com.jugglinhats.hexagonal.storefront.domain;
 
 import com.jugglinhats.hexagonal.storefront.dao.ProductRepository;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import org.springframework.stereotype.Service;
 
@@ -18,5 +19,10 @@ public class DefaultStorefrontService implements StorefrontService {
     @Override
     public Flux<Product> queryProductsByTag(Tag tag) {
         return productRepository.findByTag(tag.name());
+    }
+
+    @Override
+    public Mono<Product> getProductDetails(String productId) {
+        return productRepository.findById(productId);
     }
 }
