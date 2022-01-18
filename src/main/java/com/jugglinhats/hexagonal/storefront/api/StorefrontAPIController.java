@@ -2,9 +2,9 @@ package com.jugglinhats.hexagonal.storefront.api;
 
 import java.util.List;
 
-import com.jugglinhats.hexagonal.storefront.domain.Product;
-import com.jugglinhats.hexagonal.storefront.domain.StorefrontService;
-import com.jugglinhats.hexagonal.storefront.domain.Tag;
+import com.jugglinhats.hexagonal.storefront.domain.product.Product;
+import com.jugglinhats.hexagonal.storefront.domain.product.StorefrontService;
+import com.jugglinhats.hexagonal.storefront.domain.product.Tag;
 import reactor.core.publisher.Mono;
 
 import org.springframework.web.bind.annotation.GetMapping;

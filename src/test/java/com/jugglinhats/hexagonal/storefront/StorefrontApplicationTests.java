@@ -112,4 +112,37 @@ class StorefrontApplicationTests {
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody().json(kawaiPiano);
     }
+
+    @Test
+    void returnsInventoryAvailabilityAlongWithProductDetails() {
+        //language=JSON
+        var kawaiPiano = """
+                {
+                  "id": "83085b91-5d7d-4301-9119-719f150e879a",
+                  "availability": "OUT_OF_STOCK"
+                }
+                """;
+
+        testClient.get().uri("/products/{id}", "83085b91-5d7d-4301-9119-719f150e879a")
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody().json(kawaiPiano);
+
+        //language=JSON
+        var peaveyAmp = """
+                {
+                  "id": "f5073ebc-aebc-47ac-b4b2-095e3eb5bffe",
+                  "availability": "IN_STOCK"
+                }
+                """;
+
+        testClient.get().uri("/products/{id}", "f5073ebc-aebc-47ac-b4b2-095e3eb5bffe")
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody().json(peaveyAmp);
+    }
 }

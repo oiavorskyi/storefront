@@ -6,7 +6,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.function.Consumer;
 
-import com.jugglinhats.hexagonal.storefront.domain.Product;
+import com.jugglinhats.hexagonal.storefront.domain.product.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import reactor.test.StepVerifier;
@@ -28,14 +28,17 @@ class ProductRepositoryTests {
             "f32e5442-2610-4d0c-a266-1dfc646c9d96",
             "Fender American Professional II Telecaster Deluxe",
             "A New Spin on the American Professional Telecaster Deluxe",
-            LocalDate.of(2020, 12, 7)
+            LocalDate.of(2020, 12, 7),
+            null
     );
     static final Product STRATOCASTER = new Product(
             "48c1ccf1-ee72-4b90-82f1-e07390578c96",
             "Squier Classic Vibe Stratocaster",
             "The Stratocaster Never Goes Out of Style",
-            LocalDate.of(2018, 3, 2)
+            LocalDate.of(2018, 3, 2),
+            null
     );
+    static final String NON_EXISTENT_PRODUCT_ID = "unknown";
 
     @Autowired
     R2dbcEntityTemplate template;
@@ -67,7 +70,7 @@ class ProductRepositoryTests {
                 .assertNext(matchesRequiredFieldsOf(STRATOCASTER))
                 .verifyComplete();
 
-        repository.findByTag("unknown")
+        repository.findByTag(NON_EXISTENT_PRODUCT_ID)
                 .as(StepVerifier::create)
                 .expectNextCount(0)
                 .verifyComplete();
@@ -92,7 +95,24 @@ class ProductRepositoryTests {
                 .assertNext(p -> assertThat(p).isEqualTo(STRATOCASTER))
                 .verifyComplete();
 
-        repository.findById("unknown")
+        repository.findById(NON_EXISTENT_PRODUCT_ID)
+                .as(StepVerifier::create)
+                .verifyComplete();
+    }
+
+    @Test
+    void retrievesInventoryForProductWithId() {
+        repository.getInventoryForProductWithId(TELECASTER.id())
+                .as(StepVerifier::create)
+                .expectNext(12)
+                .verifyComplete();
+
+        repository.getInventoryForProductWithId(STRATOCASTER.id())
+                .as(StepVerifier::create)
+                .expectNext(0)
+                .verifyComplete();
+
+        repository.getInventoryForProductWithId(NON_EXISTENT_PRODUCT_ID)
                 .as(StepVerifier::create)
                 .verifyComplete();
     }

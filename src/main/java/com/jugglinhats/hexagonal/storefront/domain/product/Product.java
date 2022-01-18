@@ -1,4 +1,4 @@
-package com.jugglinhats.hexagonal.storefront.domain;
+package com.jugglinhats.hexagonal.storefront.domain.product;
 
 import java.time.LocalDate;
 
@@ -10,5 +10,6 @@ public record Product(
         @Id String id,
         String name,
         String description,
-        @JsonFormat(pattern = "MM/dd/yyyy") LocalDate dateAdded) {
+        @JsonFormat(pattern = "MM/dd/yyyy") LocalDate dateAdded,
+        InventoryAvailability availability) {
 }

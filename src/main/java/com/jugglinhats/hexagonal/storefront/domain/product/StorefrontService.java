@@ -1,4 +1,4 @@
-package com.jugglinhats.hexagonal.storefront.domain;
+package com.jugglinhats.hexagonal.storefront.domain.product;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

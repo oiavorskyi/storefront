@@ -2,9 +2,10 @@ package com.jugglinhats.hexagonal.storefront.api;
 
 import java.time.LocalDate;
 
-import com.jugglinhats.hexagonal.storefront.domain.Product;
-import com.jugglinhats.hexagonal.storefront.domain.StorefrontService;
-import com.jugglinhats.hexagonal.storefront.domain.Tag;
+import com.jugglinhats.hexagonal.storefront.domain.product.InventoryAvailability;
+import com.jugglinhats.hexagonal.storefront.domain.product.Product;
+import com.jugglinhats.hexagonal.storefront.domain.product.StorefrontService;
+import com.jugglinhats.hexagonal.storefront.domain.product.Tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
@@ -49,8 +50,18 @@ class StorefrontAPIControllerTests {
 
     @Test
     void queryProductsByTagReturnsMultipleProducts() {
-        var productA = new Product("productAId", "productA", "productADescription", LocalDate.now());
-        var productB = new Product("productBId", "productB", "productBDescription", LocalDate.now());
+        var productA = new Product(
+                "productAId",
+                "productA",
+                "productADescription",
+                LocalDate.now(),
+                InventoryAvailability.IN_STOCK);
+        var productB = new Product(
+                "productBId",
+                "productB",
+                "productBDescription",
+                LocalDate.now(),
+                InventoryAvailability.IN_STOCK);
         var someTag = Tag.of("some tag");
 
         given(storefrontService.queryProductsByTag(someTag))
@@ -108,7 +119,8 @@ class StorefrontAPIControllerTests {
                 "productId",
                 "productName",
                 "productDescription",
-                LocalDate.of(2020, 2, 5));
+                LocalDate.of(2020, 2, 5),
+                InventoryAvailability.IN_STOCK);
 
         given(storefrontService.getProductDetails("productId"))
                 .willReturn(Mono.just(product));
@@ -129,4 +141,32 @@ class StorefrontAPIControllerTests {
                 .expectHeader().contentType(MediaType.APPLICATION_JSON)
                 .expectBody().json(productJson);
     }
+
+    @Test
+    void getProductDetailsReturnsInventoryAvailability() {
+        var product = new Product(
+                "productId",
+                "productName",
+                "productDescription",
+                LocalDate.of(2020, 2, 5),
+                InventoryAvailability.IN_STOCK);
+
+        given(storefrontService.getProductDetails("productId"))
+                .willReturn(Mono.just(product));
+
+        var productJson = """
+                {
+                    "id": "productId",
+                    "availability": "IN_STOCK"
+                }
+                """;
+
+        webClient.get().uri("/products/{id}", "productId")
+                .accept(MediaType.APPLICATION_JSON)
+                .exchange()
+                .expectStatus().isOk()
+                .expectHeader().contentType(MediaType.APPLICATION_JSON)
+                .expectBody().json(productJson);
+    }
+
 }
