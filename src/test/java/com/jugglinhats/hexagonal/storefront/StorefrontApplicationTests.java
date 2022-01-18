@@ -100,7 +100,8 @@ class StorefrontApplicationTests {
                 {
                   "id": "83085b91-5d7d-4301-9119-719f150e879a",
                   "name": "Kawai ES920 88-key Digital Piano",
-                  "description": "Kawai Tone and Touch, Plus Unbeatable Value"
+                  "description": "Kawai Tone and Touch, Plus Unbeatable Value",
+                  "dateAdded": "02/11/2021"
                 }
                 """;
 

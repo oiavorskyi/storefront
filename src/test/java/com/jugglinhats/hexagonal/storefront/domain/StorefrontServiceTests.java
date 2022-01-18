@@ -1,5 +1,7 @@
 package com.jugglinhats.hexagonal.storefront.domain;
 
+import java.time.LocalDate;
+
 import com.jugglinhats.hexagonal.storefront.dao.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,8 +30,8 @@ class StorefrontServiceTests {
 
     @Test
     void queriesProductsByTag() {
-        var productA = new Product("productAId", "productAName", "productADescription");
-        var productB = new Product("productBId", "productBName", "productBDescription");
+        var productA = new Product("productAId", "productAName", "productADescription", LocalDate.now());
+        var productB = new Product("productBId", "productBName", "productBDescription", LocalDate.now());
         var someTag = Tag.of("some tag");
 
         given(productRepository.findByTag(someTag.name()))
@@ -46,7 +48,7 @@ class StorefrontServiceTests {
     @Test
     void returnsProductDetails() {
         var productId = "productId";
-        var product = new Product(productId, "productName", "productDescription");
+        var product = new Product(productId, "productName", "productDescription", LocalDate.now());
 
         given(productRepository.findById(productId))
                 .willReturn(Mono.just(product));

@@ -1,5 +1,7 @@
 package com.jugglinhats.hexagonal.storefront.api;
 
+import java.time.LocalDate;
+
 import com.jugglinhats.hexagonal.storefront.domain.Product;
 import com.jugglinhats.hexagonal.storefront.domain.StorefrontService;
 import com.jugglinhats.hexagonal.storefront.domain.Tag;
@@ -47,8 +49,8 @@ class StorefrontAPIControllerTests {
 
     @Test
     void queryProductsByTagReturnsMultipleProducts() {
-        var productA = new Product("productAId", "productA", "productADescription");
-        var productB = new Product("productBId", "productB", "productBDescription");
+        var productA = new Product("productAId", "productA", "productADescription", LocalDate.now());
+        var productB = new Product("productBId", "productB", "productBDescription", LocalDate.now());
         var someTag = Tag.of("some tag");
 
         given(storefrontService.queryProductsByTag(someTag))
@@ -102,7 +104,11 @@ class StorefrontAPIControllerTests {
 
     @Test
     void getProductDetailsForExistingProduct() {
-        var product = new Product("productId", "productName", "productDescription");
+        var product = new Product(
+                "productId",
+                "productName",
+                "productDescription",
+                LocalDate.of(2020, 2, 5));
 
         given(storefrontService.getProductDetails("productId"))
                 .willReturn(Mono.just(product));
@@ -111,7 +117,8 @@ class StorefrontAPIControllerTests {
                 {
                     "id": "productId",
                     "name": "productName",
-                    "description": "productDescription"
+                    "description": "productDescription",
+                    "dateAdded": "02/05/2020"
                 }
                 """;
 
