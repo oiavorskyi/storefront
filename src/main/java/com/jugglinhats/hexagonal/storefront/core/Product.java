@@ -1,4 +1,4 @@
-package com.jugglinhats.hexagonal.storefront.domain.product;
+package com.jugglinhats.hexagonal.storefront.core;
 
 import java.time.LocalDate;
 

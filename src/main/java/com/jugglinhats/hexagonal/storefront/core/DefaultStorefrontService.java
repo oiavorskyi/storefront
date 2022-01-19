@@ -1,8 +1,7 @@
-package com.jugglinhats.hexagonal.storefront.domain.product;
+package com.jugglinhats.hexagonal.storefront.core;
 
 
-import com.jugglinhats.hexagonal.storefront.dao.ProductRepository;
-import com.jugglinhats.hexagonal.storefront.domain.inventory.InventoryService;
+import com.jugglinhats.hexagonal.storefront.adapters.productdb.ProductRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

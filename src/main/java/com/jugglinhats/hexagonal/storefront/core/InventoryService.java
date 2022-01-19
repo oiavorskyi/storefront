@@ -1,6 +1,5 @@
-package com.jugglinhats.hexagonal.storefront.domain.inventory;
+package com.jugglinhats.hexagonal.storefront.core;
 
-import com.jugglinhats.hexagonal.storefront.domain.product.InventoryAvailability;
 import reactor.core.publisher.Mono;
 
 public interface InventoryService {

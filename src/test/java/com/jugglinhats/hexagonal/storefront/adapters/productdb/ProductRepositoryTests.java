@@ -1,4 +1,4 @@
-package com.jugglinhats.hexagonal.storefront.dao;
+package com.jugglinhats.hexagonal.storefront.adapters.productdb;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -6,7 +6,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.function.Consumer;
 
-import com.jugglinhats.hexagonal.storefront.domain.product.Product;
+import com.jugglinhats.hexagonal.storefront.core.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import reactor.test.StepVerifier;

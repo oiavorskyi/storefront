@@ -1,7 +1,8 @@
-package com.jugglinhats.hexagonal.storefront.domain.inventory;
+package com.jugglinhats.hexagonal.storefront.adapters.inventorydb;
 
-import com.jugglinhats.hexagonal.storefront.dao.ProductRepository;
-import com.jugglinhats.hexagonal.storefront.domain.product.InventoryAvailability;
+import com.jugglinhats.hexagonal.storefront.adapters.productdb.ProductRepository;
+import com.jugglinhats.hexagonal.storefront.core.InventoryAvailability;
+import com.jugglinhats.hexagonal.storefront.core.InventoryService;
 import reactor.core.publisher.Mono;
 
 import org.springframework.stereotype.Service;

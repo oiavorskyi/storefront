@@ -2,10 +2,10 @@ package com.jugglinhats.hexagonal.storefront.api;
 
 import java.time.LocalDate;
 
-import com.jugglinhats.hexagonal.storefront.domain.product.InventoryAvailability;
-import com.jugglinhats.hexagonal.storefront.domain.product.Product;
-import com.jugglinhats.hexagonal.storefront.domain.product.StorefrontService;
-import com.jugglinhats.hexagonal.storefront.domain.product.Tag;
+import com.jugglinhats.hexagonal.storefront.core.InventoryAvailability;
+import com.jugglinhats.hexagonal.storefront.core.Product;
+import com.jugglinhats.hexagonal.storefront.core.StorefrontService;
+import com.jugglinhats.hexagonal.storefront.core.Tag;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;

@@ -1,4 +1,4 @@
-package com.jugglinhats.hexagonal.storefront.domain.product;
+package com.jugglinhats.hexagonal.storefront.core;
 
 public record Tag(String name) {
     public static Tag of(String name) {
