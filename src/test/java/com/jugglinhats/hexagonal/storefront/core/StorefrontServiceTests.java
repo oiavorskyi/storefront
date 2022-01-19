@@ -2,7 +2,6 @@ package com.jugglinhats.hexagonal.storefront.core;
 
 import java.time.LocalDate;
 
-import com.jugglinhats.hexagonal.storefront.adapters.productdb.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

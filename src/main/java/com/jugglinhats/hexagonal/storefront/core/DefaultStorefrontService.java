@@ -1,7 +1,5 @@
 package com.jugglinhats.hexagonal.storefront.core;
 
-
-import com.jugglinhats.hexagonal.storefront.adapters.productdb.ProductRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

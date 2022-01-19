@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.util.function.Consumer;
 
 import com.jugglinhats.hexagonal.storefront.core.Product;
+import com.jugglinhats.hexagonal.storefront.core.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import reactor.test.StepVerifier;
@@ -23,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.from;
 
 @DataR2dbcTest
-class ProductRepositoryTests {
+class R2DBCProductRepositoryTests {
     static final Product TELECASTER = new Product(
             "f32e5442-2610-4d0c-a266-1dfc646c9d96",
             "Fender American Professional II Telecaster Deluxe",
@@ -49,14 +50,19 @@ class ProductRepositoryTests {
     @Value("classpath:/test-data.sql")
     Resource testDataSql;
 
-    @Autowired
     ProductRepository repository;
+
+    @Autowired
+    ProductRecordRepository productRecordRepository;
+
 
     @BeforeEach
     void setup() throws IOException {
         dbClient = template.getDatabaseClient();
         executeSqlLoadedFrom(schemaSql);
         executeSqlLoadedFrom(testDataSql);
+
+        repository = new R2DBCProductRepository(productRecordRepository);
     }
 
     @Test

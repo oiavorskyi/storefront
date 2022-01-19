@@ -1,8 +1,8 @@
 package com.jugglinhats.hexagonal.storefront.adapters.inventorydb;
 
-import com.jugglinhats.hexagonal.storefront.adapters.productdb.ProductRepository;
 import com.jugglinhats.hexagonal.storefront.core.InventoryAvailability;
 import com.jugglinhats.hexagonal.storefront.core.InventoryService;
+import com.jugglinhats.hexagonal.storefront.core.ProductRepository;
 import reactor.core.publisher.Mono;
 
 import org.springframework.stereotype.Service;
