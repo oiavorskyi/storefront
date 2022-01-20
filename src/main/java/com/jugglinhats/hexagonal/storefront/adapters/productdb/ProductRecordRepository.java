@@ -1,7 +1,6 @@
 package com.jugglinhats.hexagonal.storefront.adapters.productdb;
 
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
@@ -13,6 +12,4 @@ interface ProductRecordRepository extends ReactiveCrudRepository<ProductRecord, 
     @Query("SELECT P.ID, P.NAME, P.DESCRIPTION FROM PRODUCT_TAG PT JOIN PRODUCT P on P.ID = PT.PRODUCT_ID WHERE PT.TAG = :tag")
     Flux<ProductRecord> findByTag(String tag);
 
-    @Query("SELECT INVENTORY FROM PRODUCT_INVENTORY WHERE PRODUCT_ID = :productId")
-    Mono<Integer> getInventoryForProductWithId(String productId);
 }

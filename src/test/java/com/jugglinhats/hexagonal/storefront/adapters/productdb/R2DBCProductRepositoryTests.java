@@ -45,9 +45,9 @@ class R2DBCProductRepositoryTests {
     R2dbcEntityTemplate template;
     DatabaseClient dbClient;
 
-    @Value("classpath:/schema.sql")
+    @Value("classpath:/schema-product.sql")
     Resource schemaSql;
-    @Value("classpath:/test-data.sql")
+    @Value("classpath:/test-data-product.sql")
     Resource testDataSql;
 
     ProductRepository repository;
@@ -102,23 +102,6 @@ class R2DBCProductRepositoryTests {
                 .verifyComplete();
 
         repository.findById(NON_EXISTENT_PRODUCT_ID)
-                .as(StepVerifier::create)
-                .verifyComplete();
-    }
-
-    @Test
-    void retrievesInventoryForProductWithId() {
-        repository.getInventoryForProductWithId(TELECASTER.id())
-                .as(StepVerifier::create)
-                .expectNext(12)
-                .verifyComplete();
-
-        repository.getInventoryForProductWithId(STRATOCASTER.id())
-                .as(StepVerifier::create)
-                .expectNext(0)
-                .verifyComplete();
-
-        repository.getInventoryForProductWithId(NON_EXISTENT_PRODUCT_ID)
                 .as(StepVerifier::create)
                 .verifyComplete();
     }

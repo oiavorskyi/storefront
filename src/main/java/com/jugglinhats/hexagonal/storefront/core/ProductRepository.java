@@ -5,6 +5,5 @@ import reactor.core.publisher.Mono;
 
 public interface ProductRepository {
     Flux<Product> findByTag(String tag);
-    Mono<Integer> getInventoryForProductWithId(String productId);
     Mono<Product> findById(String productId);
 }

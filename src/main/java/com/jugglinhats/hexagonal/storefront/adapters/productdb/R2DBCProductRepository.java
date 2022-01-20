@@ -23,11 +23,6 @@ class R2DBCProductRepository implements ProductRepository {
     }
 
     @Override
-    public Mono<Integer> getInventoryForProductWithId(String productId) {
-        return productRecordRepository.getInventoryForProductWithId(productId);
-    }
-
-    @Override
     public Mono<Product> findById(String productId) {
         return productRecordRepository.findById(productId)
                 .map(this::toProduct);

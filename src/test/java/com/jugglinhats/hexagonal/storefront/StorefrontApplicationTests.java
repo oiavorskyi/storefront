@@ -31,16 +31,22 @@ class StorefrontApplicationTests {
     R2dbcEntityTemplate template;
     DatabaseClient dbClient;
 
-    @Value("classpath:/schema.sql")
-    Resource schemaSql;
-    @Value("classpath:/test-data.sql")
-    Resource testDataSql;
+    @Value("classpath:/schema-product.sql")
+    Resource productSchemaSql;
+    @Value("classpath:/test-data-product.sql")
+    Resource productTestDataSql;
+    @Value("classpath:/schema-inventory.sql")
+    Resource inventorySchemaSql;
+    @Value("classpath:/test-data-inventory.sql")
+    Resource inventoryTestDataSql;
 
     @BeforeEach
     void setup() throws IOException {
         dbClient = template.getDatabaseClient();
-        executeSqlLoadedFrom(schemaSql);
-        executeSqlLoadedFrom(testDataSql);
+        executeSqlLoadedFrom(productSchemaSql);
+        executeSqlLoadedFrom(productTestDataSql);
+        executeSqlLoadedFrom(inventorySchemaSql);
+        executeSqlLoadedFrom(inventoryTestDataSql);
     }
 
     void executeSqlLoadedFrom(Resource schemaSql) throws IOException {

@@ -14,10 +14,3 @@ create table product_tag
     tag VARCHAR(255) NOT NULL,
     PRIMARY KEY (product_id, tag)
 );
-
-drop table if exists product_inventory;
-create table product_inventory
-(
-    product_id VARCHAR(255) PRIMARY KEY,
-    inventory  INTEGER NOT NULL
-);
