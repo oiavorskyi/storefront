@@ -6,7 +6,7 @@ import reactor.core.publisher.Mono;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DefaultStorefrontService implements StorefrontService {
+class DefaultStorefrontService implements StorefrontService {
 
     private final ProductRepository productRepository;
     private final InventoryService inventoryService;
@@ -17,7 +17,7 @@ public class DefaultStorefrontService implements StorefrontService {
     }
 
     @Override
-    public Flux<Product> queryProductsByTag(Tag tag) {
+    public Flux<ProductSummary> queryProductsByTag(Tag tag) {
         return productRepository.findByTag(tag.name());
     }
 
@@ -25,12 +25,6 @@ public class DefaultStorefrontService implements StorefrontService {
     public Mono<Product> getProductDetails(String productId) {
         return productRepository.findById(productId)
                 .flatMap(p -> inventoryService.getInventoryFor(p.id())
-                        .map(ia -> productWithAvailability(p, ia)));
-    }
-
-
-
-    private Product productWithAvailability(Product p, InventoryAvailability availability) {
-        return new Product(p.id(), p.name(), p.description(), p.dateAdded(), availability);
+                        .map(ia -> Product.fromDetailsAndAvailability(p, ia)));
     }
 }

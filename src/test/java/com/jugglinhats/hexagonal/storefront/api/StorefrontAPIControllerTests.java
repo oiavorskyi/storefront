@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 import com.jugglinhats.hexagonal.storefront.core.InventoryAvailability;
 import com.jugglinhats.hexagonal.storefront.core.Product;
+import com.jugglinhats.hexagonal.storefront.core.ProductSummary;
 import com.jugglinhats.hexagonal.storefront.core.StorefrontService;
 import com.jugglinhats.hexagonal.storefront.core.Tag;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,18 +51,14 @@ class StorefrontAPIControllerTests {
 
     @Test
     void queryProductsByTagReturnsMultipleProducts() {
-        var productA = new Product(
+        var productA = new ProductSummary(
                 "productAId",
                 "productA",
-                "productADescription",
-                LocalDate.now(),
-                InventoryAvailability.IN_STOCK);
-        var productB = new Product(
+                "productADescription");
+        var productB = new ProductSummary(
                 "productBId",
                 "productB",
-                "productBDescription",
-                LocalDate.now(),
-                InventoryAvailability.IN_STOCK);
+                "productBDescription");
         var someTag = Tag.of("some tag");
 
         given(storefrontService.queryProductsByTag(someTag))

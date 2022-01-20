@@ -6,8 +6,9 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.util.function.Consumer;
 
-import com.jugglinhats.hexagonal.storefront.core.Product;
+import com.jugglinhats.hexagonal.storefront.core.ProductDetails;
 import com.jugglinhats.hexagonal.storefront.core.ProductRepository;
+import com.jugglinhats.hexagonal.storefront.core.ProductSummary;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import reactor.test.StepVerifier;
@@ -25,19 +26,17 @@ import static org.assertj.core.api.Assertions.from;
 
 @DataR2dbcTest
 class R2DBCProductRepositoryTests {
-    static final Product TELECASTER = new Product(
+    static final ProductRecord TELECASTER = new ProductRecord(
             "f32e5442-2610-4d0c-a266-1dfc646c9d96",
             "Fender American Professional II Telecaster Deluxe",
             "A New Spin on the American Professional Telecaster Deluxe",
-            LocalDate.of(2020, 12, 7),
-            null
+            LocalDate.of(2020, 12, 7)
     );
-    static final Product STRATOCASTER = new Product(
+    static final ProductRecord STRATOCASTER = new ProductRecord(
             "48c1ccf1-ee72-4b90-82f1-e07390578c96",
             "Squier Classic Vibe Stratocaster",
             "The Stratocaster Never Goes Out of Style",
-            LocalDate.of(2018, 3, 2),
-            null
+            LocalDate.of(2018, 3, 2)
     );
     static final String NON_EXISTENT_PRODUCT_ID = "unknown";
 
@@ -67,13 +66,10 @@ class R2DBCProductRepositoryTests {
 
     @Test
     void findsProductsByTag() {
-        // Returned Product doesn't have dateAdded field in this case, so we
-        // have to either skip it in the assertion or adjust implementation
-        // to read the field. Skipping makes more sense.
         repository.findByTag("electric guitar")
                 .as(StepVerifier::create)
-                .assertNext(matchesRequiredFieldsOf(TELECASTER))
-                .assertNext(matchesRequiredFieldsOf(STRATOCASTER))
+                .assertNext(matchesSummaryOf(TELECASTER))
+                .assertNext(matchesSummaryOf(STRATOCASTER))
                 .verifyComplete();
 
         repository.findByTag(NON_EXISTENT_PRODUCT_ID)
@@ -82,28 +78,36 @@ class R2DBCProductRepositoryTests {
                 .verifyComplete();
     }
 
-    private Consumer<Product> matchesRequiredFieldsOf(Product telecaster) {
-        return p -> assertThat(p)
-                .returns(telecaster.id(), from(Product::id))
-                .returns(telecaster.name(), from(Product::name))
-                .returns(telecaster.description(), from(Product::description));
-    }
-
     @Test
     void findsProductById() {
         repository.findById(TELECASTER.id())
                 .as(StepVerifier::create)
-                .assertNext(p -> assertThat(p).isEqualTo(TELECASTER))
+                .assertNext(matchesDetailsOf(TELECASTER))
                 .verifyComplete();
 
         repository.findById(STRATOCASTER.id())
                 .as(StepVerifier::create)
-                .assertNext(p -> assertThat(p).isEqualTo(STRATOCASTER))
+                .assertNext(matchesDetailsOf(STRATOCASTER))
                 .verifyComplete();
 
         repository.findById(NON_EXISTENT_PRODUCT_ID)
                 .as(StepVerifier::create)
                 .verifyComplete();
+    }
+
+    private Consumer<ProductSummary> matchesSummaryOf(ProductRecord record) {
+        return p -> assertThat(p)
+                .returns(record.id(), from(ProductSummary::id))
+                .returns(record.name(), from(ProductSummary::name))
+                .returns(record.description(), from(ProductSummary::description));
+    }
+
+    private Consumer<ProductDetails> matchesDetailsOf(ProductRecord record) {
+        return p -> assertThat(p)
+                .returns(record.id(), from(ProductDetails::id))
+                .returns(record.name(), from(ProductDetails::name))
+                .returns(record.description(), from(ProductDetails::description))
+                .returns(record.dateAdded(), from(ProductDetails::dateAdded));
     }
 
     void executeSqlLoadedFrom(Resource schemaSql) throws IOException {

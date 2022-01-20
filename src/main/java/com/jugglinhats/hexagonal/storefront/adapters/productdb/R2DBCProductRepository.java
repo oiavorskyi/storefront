@@ -1,7 +1,8 @@
 package com.jugglinhats.hexagonal.storefront.adapters.productdb;
 
-import com.jugglinhats.hexagonal.storefront.core.Product;
+import com.jugglinhats.hexagonal.storefront.core.ProductDetails;
 import com.jugglinhats.hexagonal.storefront.core.ProductRepository;
+import com.jugglinhats.hexagonal.storefront.core.ProductSummary;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -17,24 +18,15 @@ class R2DBCProductRepository implements ProductRepository {
     }
 
     @Override
-    public Flux<Product> findByTag(String tag) {
+    public Flux<ProductSummary> findByTag(String tag) {
         return productRecordRepository.findByTag(tag)
-                .map(this::toProduct);
+                .map(ProductRecord::toProductSummary);
     }
 
     @Override
-    public Mono<Product> findById(String productId) {
+    public Mono<ProductDetails> findById(String productId) {
         return productRecordRepository.findById(productId)
-                .map(this::toProduct);
+                .map(ProductRecord::toProductDetails);
     }
 
-    private Product toProduct(ProductRecord productRecord) {
-        return new Product(
-                productRecord.id(),
-                productRecord.name(),
-                productRecord.description(),
-                productRecord.dateAdded(),
-                null
-        );
-    }
 }

@@ -19,19 +19,18 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class StorefrontServiceTests {
-
     static final Product PRODUCT_A = new Product(
             "productAId",
             "productAName",
             "productADescription",
             LocalDate.now(),
-            null);
+            InventoryAvailability.IN_STOCK);
     static final Product PRODUCT_B = new Product(
             "productBId",
             "productBName",
             "productBDescription",
             LocalDate.now(),
-            null);
+            InventoryAvailability.OUT_OF_STOCK);
 
     StorefrontService service;
 
@@ -55,37 +54,40 @@ class StorefrontServiceTests {
     @Test
     void queriesProductsByTag() {
         var someTag = Tag.of("some tag");
+        var productASummary = productSummaryOf(PRODUCT_A);
+        var productBSummary = productSummaryOf(PRODUCT_B);
 
         given(productRepository.findByTag(someTag.name()))
-                .willReturn(Flux.just(PRODUCT_A, PRODUCT_B));
+                .willReturn(Flux.just(productASummary, productBSummary));
 
         service.queryProductsByTag(someTag)
                 .collectList()
                 .as(StepVerifier::create)
                 .assertNext(products -> assertThat(products)
-                        .containsExactlyInAnyOrder(PRODUCT_A, PRODUCT_B))
+                        .containsExactlyInAnyOrder(productASummary, productBSummary))
                 .verifyComplete();
     }
 
     @Test
     void returnsDetailsForProduct() {
-        var productId = "productIdA";
-        var productWithAvailability = new Product(
-                PRODUCT_A.id(),
-                PRODUCT_A.name(),
-                PRODUCT_A.description(),
-                PRODUCT_A.dateAdded(),
-                InventoryAvailability.IN_STOCK);
+        given(productRepository.findById(PRODUCT_A.id()))
+                .willReturn(Mono.just(productDetailsOf(PRODUCT_A)));
 
-        given(productRepository.findById(productId))
-                .willReturn(Mono.just(PRODUCT_A));
         given(inventoryService.getInventoryFor(PRODUCT_A.id()))
                 .willReturn(Mono.just(InventoryAvailability.IN_STOCK));
 
-        service.getProductDetails(productId)
+        service.getProductDetails(PRODUCT_A.id())
                 .as(StepVerifier::create)
-                .assertNext(p -> assertThat(p).isEqualTo(productWithAvailability))
+                .assertNext(p -> assertThat(p).isEqualTo(PRODUCT_A))
                 .verifyComplete();
+    }
+
+    private ProductSummary productSummaryOf(Product product) {
+        return new ProductSummary(product.id(), product.name(), product.description());
+    }
+
+    private ProductDetails productDetailsOf(Product product) {
+        return new ProductDetails(product.id(), product.name(), product.description(), product.dateAdded());
     }
 
 }

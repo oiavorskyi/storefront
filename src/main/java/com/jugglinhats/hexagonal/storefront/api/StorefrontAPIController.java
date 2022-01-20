@@ -6,6 +6,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jugglinhats.hexagonal.storefront.core.InventoryAvailability;
 import com.jugglinhats.hexagonal.storefront.core.Product;
+import com.jugglinhats.hexagonal.storefront.core.ProductSummary;
 import com.jugglinhats.hexagonal.storefront.core.StorefrontService;
 import com.jugglinhats.hexagonal.storefront.core.Tag;
 import reactor.core.publisher.Mono;
@@ -27,7 +28,7 @@ public class StorefrontAPIController {
     @GetMapping("/products")
     Mono<ProductsQueryResponse> productsQuery(@RequestParam String tag) {
         return storefrontService.queryProductsByTag(Tag.of(tag))
-                .map(ProductDTO::fromProduct)
+                .map(ProductSummaryDTO::fromProductSummary)
                 .collectList()
                 .map(products -> new ProductsQueryResponse(tag, products));
     }
@@ -36,6 +37,19 @@ public class StorefrontAPIController {
     Mono<ProductDTO> productDetails(@PathVariable String productId) {
         return storefrontService.getProductDetails(productId)
                 .map(ProductDTO::fromProduct);
+    }
+
+    record ProductSummaryDTO(
+            String id,
+            String name,
+            String description) {
+        static ProductSummaryDTO fromProductSummary(ProductSummary productSummary) {
+            return new ProductSummaryDTO(
+                    productSummary.id(),
+                    productSummary.name(),
+                    productSummary.description()
+            );
+        }
     }
 
     record ProductDTO(
@@ -55,7 +69,7 @@ public class StorefrontAPIController {
         }
     }
 
-    record ProductsQueryResponse(String tag_query, List<ProductDTO> products) {
+    record ProductsQueryResponse(String tag_query, List<ProductSummaryDTO> products) {
     }
 
 }

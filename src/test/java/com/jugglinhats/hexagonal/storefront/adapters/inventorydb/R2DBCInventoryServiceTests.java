@@ -4,11 +4,9 @@ package com.jugglinhats.hexagonal.storefront.adapters.inventorydb;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
-import java.time.LocalDate;
 
 import com.jugglinhats.hexagonal.storefront.core.InventoryAvailability;
 import com.jugglinhats.hexagonal.storefront.core.InventoryService;
-import com.jugglinhats.hexagonal.storefront.core.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import reactor.test.StepVerifier;
