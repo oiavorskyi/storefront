@@ -18,7 +18,8 @@ class R2DBCProductRepository implements ProductRepository {
 
     @Override
     public Flux<Product> findByTag(String tag) {
-        return productRecordRepository.findByTag(tag);
+        return productRecordRepository.findByTag(tag)
+                .map(this::toProduct);
     }
 
     @Override
@@ -28,6 +29,17 @@ class R2DBCProductRepository implements ProductRepository {
 
     @Override
     public Mono<Product> findById(String productId) {
-        return productRecordRepository.findById(productId);
+        return productRecordRepository.findById(productId)
+                .map(this::toProduct);
+    }
+
+    private Product toProduct(ProductRecord productRecord) {
+        return new Product(
+                productRecord.id(),
+                productRecord.name(),
+                productRecord.description(),
+                productRecord.dateAdded(),
+                null
+        );
     }
 }
