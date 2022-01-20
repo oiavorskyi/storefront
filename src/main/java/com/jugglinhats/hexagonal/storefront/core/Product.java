@@ -7,13 +7,4 @@ public record Product(String id,
                       String description,
                       LocalDate dateAdded,
                       InventoryAvailability availability) {
-    static Product fromDetailsAndAvailability(ProductDetails productDetails, InventoryAvailability availability) {
-        return new Product(
-                productDetails.id(),
-                productDetails.name(),
-                productDetails.description(),
-                productDetails.dateAdded(),
-                availability
-        );
-    }
 }

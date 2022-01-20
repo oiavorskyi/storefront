@@ -9,6 +9,8 @@ import com.jugglinhats.hexagonal.storefront.core.Product;
 import com.jugglinhats.hexagonal.storefront.core.ProductSummary;
 import com.jugglinhats.hexagonal.storefront.core.StorefrontService;
 import com.jugglinhats.hexagonal.storefront.core.Tag;
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
 import reactor.core.publisher.Mono;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,7 +30,7 @@ public class StorefrontAPIController {
     @GetMapping("/products")
     Mono<ProductsQueryResponse> productsQuery(@RequestParam String tag) {
         return storefrontService.queryProductsByTag(Tag.of(tag))
-                .map(ProductSummaryDTO::fromProductSummary)
+                .map(ApiMapper.INSTANCE::toDTO)
                 .collectList()
                 .map(products -> new ProductsQueryResponse(tag, products));
     }
@@ -36,20 +38,13 @@ public class StorefrontAPIController {
     @GetMapping("/products/{productId}")
     Mono<ProductDTO> productDetails(@PathVariable String productId) {
         return storefrontService.getProductDetails(productId)
-                .map(ProductDTO::fromProduct);
+                .map(ApiMapper.INSTANCE::toDTO);
     }
 
     record ProductSummaryDTO(
             String id,
             String name,
             String description) {
-        static ProductSummaryDTO fromProductSummary(ProductSummary productSummary) {
-            return new ProductSummaryDTO(
-                    productSummary.id(),
-                    productSummary.name(),
-                    productSummary.description()
-            );
-        }
     }
 
     record ProductDTO(
@@ -58,18 +53,18 @@ public class StorefrontAPIController {
             String description,
             @JsonFormat(pattern = "MM/dd/yyyy") LocalDate dateAdded,
             InventoryAvailability availability) {
-        static ProductDTO fromProduct(Product product) {
-            return new ProductDTO(
-                    product.id(),
-                    product.name(),
-                    product.description(),
-                    product.dateAdded(),
-                    product.availability()
-            );
-        }
     }
 
     record ProductsQueryResponse(String tag_query, List<ProductSummaryDTO> products) {
+    }
+
+    @Mapper
+    interface ApiMapper {
+        ApiMapper INSTANCE = Mappers.getMapper(ApiMapper.class);
+
+        ProductDTO toDTO(Product product);
+
+        ProductSummaryDTO toDTO(ProductSummary productSummary);
     }
 
 }

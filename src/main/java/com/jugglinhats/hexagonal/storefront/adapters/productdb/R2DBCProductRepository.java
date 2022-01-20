@@ -20,13 +20,13 @@ class R2DBCProductRepository implements ProductRepository {
     @Override
     public Flux<ProductSummary> findByTag(String tag) {
         return productRecordRepository.findByTag(tag)
-                .map(ProductRecord::toProductSummary);
+                .map(ProductDBMapper.INSTANCE::productRecordToSummary);
     }
 
     @Override
     public Mono<ProductDetails> findById(String productId) {
         return productRecordRepository.findById(productId)
-                .map(ProductRecord::toProductDetails);
+                .map(ProductDBMapper.INSTANCE::productRecordToDetails);
     }
 
 }

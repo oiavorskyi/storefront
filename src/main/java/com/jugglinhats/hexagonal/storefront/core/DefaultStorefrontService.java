@@ -25,6 +25,6 @@ class DefaultStorefrontService implements StorefrontService {
     public Mono<Product> getProductDetails(String productId) {
         return productRepository.findById(productId)
                 .flatMap(p -> inventoryService.getInventoryFor(p.id())
-                        .map(ia -> Product.fromDetailsAndAvailability(p, ia)));
+                        .map(ia -> CoreMapper.INSTANCE.productFromDetailsAndAvailability(p, ia)));
     }
 }
