@@ -1,0 +1,13 @@
+plugins {
+    id 'org.springframework.boot'
+}
+
+dependencies {
+    implementation project(':core')
+    implementation project(':adapter-productdb')
+    implementation project(':adapter-inventorydb')
+
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    testImplementation 'org.springframework.data:spring-data-r2dbc'
+}

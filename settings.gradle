@@ -1,1 +1,6 @@
 rootProject.name = 'storefront'
+
+include 'core'
+include 'adapter-productdb'
+include 'adapter-inventorydb'
+include 'app'

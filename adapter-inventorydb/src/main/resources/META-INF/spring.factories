@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.jugglinhats.hexagonal.storefront.adapters.inventorydb.InventoryDBAutoConfiguration
